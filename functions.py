@@ -1,5 +1,9 @@
 import re
+import collections
 
+#This is is not created for the good readability, but to show some onliner Python ninja skills.
+
+#
 def parse_user_data(line):
     """
     >>> parse_user_data('John Doe john.doe@example.com')
@@ -14,18 +18,8 @@ def compare_lists(dir_a, dir_b):
     dir_b = ['readme.txt', 'install.txt', 'hello2.py']    
     {'removed': ['hello.py'], 'added': ['hello2.py', 'install.txt']}
     """
-    removed = (list(set(dir_a)-set(dir_b)))
-    added = (list(set(dir_b)-set(dir_a)))
-    return {'removed': sorted(removed), 'added': sorted(added)}
+    return {'removed': sorted((list(set(dir_a)-set(dir_b)))), 'added': sorted((list(set(dir_b)-set(dir_a))))}
 
-
-def print_log(message, process_id, timestamp, level=2):
-    """
-    >>> from datetime import datetime
-    >>> print_log('System started!', 1532, datetime(2019, 1, 2, 10, 30, 55).isoformat(' '))
-    2019-01-02 10:30:55 [1532] [INFO] System started!
-    """
-    print('{} [{}] [{}] {}'.format(timestamp,process_id,level,message))
 
 def biggest_rectangle(rectangles):
     """
@@ -58,32 +52,22 @@ def find_in_file(pattern):
     140 Shall be lifted- nevermore!
     """
     
-    for index,line in enumerate(open(r'D:\Programming\WEB\2nd_weekpair\python-on-steroids-python-kvzsolt\raven.txt')):
+    for index,line in enumerate(open(r'D:\Programming\Python-Fullstack\2nd_weekpair\python-on-steroids-python-kvzsolt\raven.txt')):
         if pattern in line or pattern.lower() in line and line.strip():
-            print(f"{index}{line}".strip())
-   
-def read_long_words(min_length=5):
-    """
-    >>> words = read_long_words('raven.txt', 5)
-    >>> words[:6]
-    ['midnight', 'dreary', 'pondered', 'quaint', 'curious', 'volume']
-    """
-    
-    file = open(r'D:\Programming\WEB\2nd_weekpair\python-on-steroids-python-kvzsolt\raven.txt')
-    words = file.read().split()
-    return([word for word in words if len(word)>= min_length])
-    
+            print(f"{index} {line.strip()}")
 
-def top_words(n=10):
+
+def read_long_words(min_length=11):
+    """
+    >>> words = read_long_words('raven.txt', 5)  
+    """    
+    return[re.sub('[".,-]|\'','',word.lower()) for word in re.split('\s',open(r'D:\Programming\Python-Fullstack\2nd_weekpair\python-on-steroids-python-kvzsolt\raven.txt').read()) if len(word)>= min_length]
+
+
+def top_words(n=5):
     """
     Find top N words in a file. Return a list of tuples (word, count).
 
-    >>> words = read_long_words('raven.txt', 5)
-    >>> top_words(words, 5)
-    [('chamber', 11), ('nevermore', 10), ('lenore', 8), ('nothing', 7), ('tapping', 5)]
     """
-    file = open(r'D:\Programming\WEB\2nd_weekpair\python-on-steroids-python-kvzsolt\raven.txt')
-    words = file.read().split()    
-    word_counts = {word: words.count(word) for word in words}
-    result = sorted([(value, key) for key, value in word_counts.items()], key = lambda x:x[0], reverse = True)
-    return result[:n]
+    return sorted([(key, value) for key,value in {re.sub('[".,-]|\'|\!|','',key.lower()):value for key,value in collections.Counter(open(r'D:\Programming\Python-Fullstack\2nd_weekpair\python-on-steroids-python-kvzsolt\raven.txt').read().split()).items()}.items()], key = lambda x:x[1], reverse = True)[:n]
+    
