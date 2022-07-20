@@ -1,7 +1,7 @@
 import re
 import collections
 
-#This is is not created for the good readability, but to show some onliner Python ninja skills.
+#This is is not created for the good readability, but to show some onliner Python skills.
 
 #
 def parse_user_data(line):
